@@ -10,7 +10,8 @@ class VotesController < ApplicationController
   end
 
   def index
-    @votes = current_user.votes.page(params[:page])
+    @q = current_user.votes.ransack(params[:q])
+    @photos = @q.result(:distinct => true).includes(:user).page(params[:page]).per(params[:per_page])
   end
 
   def show

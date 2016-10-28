@@ -10,7 +10,8 @@ class CommentsController < ApplicationController
   end
 
   def index
-    @comments = current_user.comments.page(params[:page])
+    @q = current_user.comments.ransack(params[:q])
+    @photos = @q.result(:distinct => true).includes(:commenter).page(params[:page]).per(params[:per_page])
   end
 
   def show
